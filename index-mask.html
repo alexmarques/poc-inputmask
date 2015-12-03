@@ -20,14 +20,10 @@
 
 		function getPattern() {
 			var locale = navigator.language || navigator.languages;
-			locale = 'pt';
 			if(locale.indexOf('en') != -1) {
-				console.log('en');
 				return '.';
-			} else {
-				console.log('pt');
-				return ',';
-			}
+			} 
+			return ',';
 		}
 	</script>
 </head>

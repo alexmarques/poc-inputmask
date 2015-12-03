@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="jquery-1.11.3.min.js" type="text/javascript"></script>
+	<script src="jquery.mask.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('.numero').mask('000s0000',{
+				translation: {
+					's': {
+						pattern: /\D/,
+						fallback: getPattern()
+					}
+				},
+				reverse:true,
+			});
+		});
+
+		function getPattern() {
+			var locale = navigator.language || navigator.languages;
+			locale = 'pt';
+			if(locale.indexOf('en') != -1) {
+				console.log('en');
+				return '.';
+			} else {
+				console.log('pt');
+				return ',';
+			}
+		}
+	</script>
+</head>
+<body>
+	<input type="text" class="numero">
+</body>
+</html>

@@ -49,13 +49,58 @@
             });
         },
 
+
+
         init : function (parameters) {
+            var decimalSeparator = function () {
+              var nav = window.navigator,
+              browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
+              browserLanguageSupport = [
+                {idioma:'pt',decimal:','},
+                {idioma:'en',decimal:'.'},
+                {idioma:'es',decimal:','}
+              ],
+              language,
+              i,
+              j,
+              idioma;
+
+              // support for HTML 5.1 "navigator.languages"
+              if (jQuery.isArray(nav.languages)) {
+                for (i = 0; i < nav.languages.length; i++) {
+                  language = nav.languages[i];
+                  if (language && language.length) {
+                    for(j = 0; j < browserLanguageSupport.length; j++) {
+                        idioma = browserLanguageSupport[j];
+                        if(language.indexOf(idioma.idioma) != -1) {
+                          return idioma.decimal;
+                        }
+                    }
+                  }
+                }
+              }
+
+              // support for other well known properties in browsers
+              for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
+                 language = nav[browserLanguagePropertyKeys[i]];
+                 if (language && language.length) {
+                    for(j = 0; j < browserLanguageSupport.length; j++) {
+                      idioma = browserLanguageSupport[j];
+                      if(language.indexOf(idioma.idioma) != -1) {
+                        return idioma.decimal;
+                      }
+                    }
+                 }
+               }
+
+              return ',';
+            };
             parameters = $.extend({
                 prefix: "",
                 suffix: "",
                 affixesStay: true,
                 thousands: ",",
-                decimal: ".",
+                decimal: decimalSeparator(),
                 precision: 2,
                 allowZero: false,
                 allowNegative: false
@@ -127,8 +172,9 @@
                         start = selection.start,
                         end = selection.end,
                         haveNumberSelected = (selection.start !== selection.end && $input.val().substring(start, end).match(/\d/)) ? true : false,
-                        startWithZero = ($input.val().substring(0, 1) === "0");
-                    return haventReachedMaxLength || haveNumberSelected || startWithZero;
+                        startWithZero = ($input.val().substring(0, 1) === "0"),
+                        reachedMaskLimit = $input.val().replace(/\D/g,'').length < parameters.mask.replace(/\D/g,'').length;
+                    return reachedMaskLimit && (haventReachedMaxLength || haveNumberSelected || startWithZero);
                 }
 
                 function setCursorPosition(pos) {

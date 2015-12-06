@@ -7,11 +7,13 @@
   <script src="jquery.maskMoney.js" type="text/javascript"></script>
 	<script type="text/javascript">
     $(document).ready(function() {
-      $('input').maskMoney({precision:4,mask:'999.9999',allowNegative:true});
+      $('#numero1').maskMoney({precision:4,maxNumbers:7,allowNegative:true});
+			$('#numero2').maskMoney({precision:1,maxNumbers:2,allowNegative:false});
     });
 	</script>
 </head>
 <body>
-  <input type="text" value="">
+  <input type="text" id="numero1" value="">
+	<input type="text" id="numero2" value="">
 </body>
 </html>
